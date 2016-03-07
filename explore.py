@@ -64,15 +64,13 @@ def setUpGeoSpatialIndex():
 
 def findRestaurantsNearRangerStation():
     loc = db.las_vegas.find_one({ "amenity" : "ranger_station" })['pos']
-    result = db.las_vegas.aggregate([
-        { "$geoNear" : { "near" : { "type" : "Point", "coordinates" : loc },
-                         "distanceField" : "dist.calculated",
-                         "maxDistance" : 2 } },
-        { "$match" : { "amenity" : "restaurant" } },
-        { "$group" : { "_id" : "$name" } }
-    ])
+    result = db.las_vegas.find({
+        "pos" : { "$near" : loc },
+        "amenity" : "restaurant",
+        "name" : { "$exists" : 1 }
+    })
     
-    return result
+    return result[:10]
 
 if __name__ == '__main__':
 #    result = getReligions()
