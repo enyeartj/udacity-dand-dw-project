@@ -10,6 +10,8 @@ Auditing of the data was performed with [audit.py](https://github.com/enyeartj/u
 
 Data cleaning and import were performed with [data.py](https://github.com/enyeartj/udacity-dand-dw-project/blob/master/data.py).
 
+Regular expressions and associated functions were used in both audit.py and data.py. These can be found in [osmREs.py](https://github.com/enyeartj/udacity-dand-dw-project/blob/master/osmREs.py). 
+
 Exploration of the data was performed with [explore.py](https://github.com/enyeartj/udacity-dand-dw-project/blob/master/explore.py).
 
 The project report can be viewed here:
