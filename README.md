@@ -7,7 +7,9 @@ for a location of our choosing. We were then tasked with cleaning up the data, c
 and exploring the data via MongoDB queries and aggregation pipelines.
 
 Auditing of the data was performed with [audit.py](https://github.com/enyeartj/udacity-dand-dw-project/blob/master/audit.py).
+
 Data cleaning and import were performed with [data.py](https://github.com/enyeartj/udacity-dand-dw-project/blob/master/data.py).
+
 Exploration of the data was performed with [explore.py](https://github.com/enyeartj/udacity-dand-dw-project/blob/master/explore.py).
 
 The project report can be viewed here:
