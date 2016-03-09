@@ -12,49 +12,42 @@ client = MongoClient("mongodb://localhost:27017")
 db = client.osmproject
 
 # how many places of worship do each religion have?
-def getReligions():
-    result = db.las_vegas.aggregate([
-        { "$match" : { "amenity" : { "$exists" : 1 },
-                       "amenity" : "place_of_worship",
-                       "religion" : { "$exists" : 1 } } },
-        { "$group" : { "_id" : "$religion",
-                       "count" : { "$sum" : 1 } } },
-        { "$sort" : { "count" : -1 } }
-    ])
-    
-    return result
+religionPipeline = [
+    { "$match" : { "amenity" : { "$exists" : 1 },
+                   "amenity" : "place_of_worship",
+                   "religion" : { "$exists" : 1 } } },
+    { "$group" : { "_id" : "$religion",
+                   "count" : { "$sum" : 1 } } },
+    { "$sort" : { "count" : -1 } }
+]
 
-def countAmenities():
-    result = db.las_vegas.aggregate([
-        { "$match" : { "amenity" : { "$exists" : 1 } } },
-        { "$group" : { "_id" : "$amenity",
-                       "count" : { "$sum" : 1 } } },
-        { "$sort" : { "count" : -1 } }
-    ])
-    
-    return result
+amenityPipeline = [
+    { "$match" : { "amenity" : { "$exists" : 1 },
+                   "amenity" : "place_of_worship",
+                   "religion" : { "$exists" : 1 } } },
+    { "$group" : { "_id" : "$religion",
+                   "count" : { "$sum" : 1 } } },
+    { "$sort" : { "count" : -1 } }
+]
 
-def top10ZipCodes():
-    result = db.las_vegas.aggregate([
-        { "$match" : { "address.postcode" : { "$exists" : 1 } } },
-        { "$group" : { "_id" : "$address.postcode",
-                       "count" : { "$sum" : 1 } } },
-        { "$sort" : { "count" : -1 } },
-        { "$limit" : 10 }
-    ])
-    
-    return result
+top10ZipCodePipeline = [
+    { "$match" : { "address.postcode" : { "$exists" : 1 } } },
+    { "$group" : { "_id" : "$address.postcode",
+                   "count" : { "$sum" : 1 } } },
+    { "$sort" : { "count" : -1 } },
+    { "$limit" : 10 }
+]
 
-def top10Restaurants():
-    result = db.las_vegas.aggregate([
-        { "$match" : { "amenity" : "restaurant" } },
-        { "$group" : { "_id" : "$name",
-                       "count" : { "$sum" : 1 } } },
-        { "$sort" : { "count" : -1 } },
-        { "$limit" : 10 }
-    ])
-    
-    return result
+top10RestaurantPipeline = [
+    { "$match" : { "amenity" : "restaurant" } },
+    { "$group" : { "_id" : "$name",
+                   "count" : { "$sum" : 1 } } },
+    { "$sort" : { "count" : -1 } },
+    { "$limit" : 10 }
+]
+
+def getResult(pipeline):
+    return db.las_vegas.aggregate(pipeline)
 
 def countWebsites():
     return db.las_vegas.find({ "website" : { "$exists" : 1 } }).count()
@@ -73,9 +66,9 @@ def findRestaurantsNearRangerStation():
     return result[:10]
 
 if __name__ == '__main__':
-#    result = getReligions()
-#    result = top10ZipCodes()
-#    result = top10Restaurants()
-#    result = countAmenities()
+#    result = getResult(religionPipeline)
+#    result = getResult(amenityPipeline)
+#    result = getResult(top10ZipCodePipeline)
+#    result = getResult(top10RestaurantPipeline)
     result = findRestaurantsNearRangerStation()
     pprint([r for r in result])
